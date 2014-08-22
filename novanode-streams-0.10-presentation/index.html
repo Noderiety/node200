@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>NodeJS 0.10 Streams API</title>
+
+		<meta name="description" content="Streaming to You Live: The Node 0.10 Streams API">
+		<meta name="author" content="Evan Oxfeld">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+		<style type="text/css">
+			.reveal span.pipe {
+			  border-radius: 2em;
+				background: green;
+				padding: 15px;
+			}
+
+			.reveal span.pipe-small-text {
+				font-size: 18px;
+				border-radius: 2em;
+				background: green;
+				padding: 10px;
+			}
+
+			.reveal span.pipe-large {
+				border-radius: 2em;
+				background: green;
+				padding: 60px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<img src="images/novanode.jpg" alt="novanode logo" height="180px">
+					<h1>Streaming to You Live</h1>
+					<h3>The Node 0.10 Streams API</h3>
+					<p>
+						<small>Created by Evan Oxfeld / <a href="http://twitter.com/evanoxfeld">@evanoxfeld</a></small>
+					</p>
+
+					<aside class="notes" data-markdown>
+						## NodeJS
+						* Server-side JS platform built on Chrome's V8 engine
+						* Easily build fast, scalable network applications
+						* Event-driven, non-blocking	
+
+						## I/O bound problems
+
+						* E.g. database, LDAP, REST call, call to ext. service
+						* You're reading from / writing to slow interfaces
+						* I/O bound if the interfaces, not the CPU, not memory
+						  constrains the problem
+					</aside>
+				</section>
+
+				<section>
+					<h2>Overview</h2>
+					<ul>
+						<li>Explore I/O bound problems in Node</li>
+						<li>Explore Streams API</li>
+					</ul>
+
+					<aside class="notes" data-markdown>
+						You'll not only have the knowledge to use Streams, but also write your own
+					</aside>
+				</section>
+
+				<section>
+					<h2>Streams Example - Unzip</h2>
+
+					<pre><code>
+fs.createReadStream('path/to/archive.zip')
+  .pipe(unzip.Parse())
+  .pipe(fstream.Writer('output/path'));
+				</pre></code>
+
+					<aside class="notes" data-markdown>
+						* Similar to unix pipes
+						* Streams are readable, writable, or both
+					</aside>
+				</section>
+
+				<section>
+					<h1>Code!</h1>
+					<h3>Behind the curtain</h3>
+
+					<aside class="notes">
+						Stream in node 0.8 inherits from EventEmitter
+					</aside>
+				</section>
+
+				<section data-markdown>
+					## util.pump(readable, writable)
+
+					* Sets up event handlers for 'data', 'end'
+					* Ignores other events e.g. 'error', 'close'
+					* API limits customization, not chainable
+				</section>
+
+				<section>
+					<section>
+						<h2>Streams in 0.8</h2>
+
+						<pre><code>
+	readable.pipe(duplex).pipe(writable)
+						</pre></code>
+
+						<aside class="notes" data-markdown>
+							* Looks more like JavaScript - pipes are chainable
+							* 0.8 was the stable version of node prior to 3/11/2013
+						</aside>
+					</section>
+
+					<section data-markdown>
+						## Streams in 0.8
+
+						* Readable
+							* Emit data events
+							* Optionally implement pause() and resume()
+						* Writable
+							* Implement write() and end()
+					</section>
+
+					<section data-markdown>
+						## Awesome! Let's demo!
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Issues - Backpressure</h2>
+						<br><br>
+						<h3>
+							<span class="pipe">Readable</span>
+							<span class="pipe">Writable</span>
+						</h3>
+
+						<aside class="notes" data-markdown>
+							## What happened?
+
+							* Naive implementation didn't handle buffering and backpresure
+							* Backpressure - stream signals to its source to stop sending data
+						</aside>
+					</section>
+
+					<section>
+						<h2>Issues - Backpressure</h2>
+						<br><br>
+						<h3>
+							<span class="pipe">Readable</span>
+							<span class="pipe-large">Writable</span>
+						</h3>
+
+						<aside class="notes" data-markdown>
+							write() returns false; stream is full
+						</aside>
+					</section>
+					<section>
+						<h2>Issues - Backpressure</h2>
+						<br><br>
+						<h3>
+							<span class="pipe-large">Readable</span>
+							<span class="pipe">Writable</span>
+					  </h3>
+						<aside class="notes" data-markdown>
+							Writable emits 'drain' to signal it's ok to resume
+						</aside>
+					</section>
+
+					<section>
+						<h2>Issues - Backpressure</h2>
+						<img src="images/flood.jpg" alt="Flood">
+					</section>
+        </section>
+
+				<section>
+					<h2>More Issues</h2>
+					<ul>
+						<li>Buffering and backpressure</li>
+						<li class="fragment">No on.('pipe') method</li>
+						<li class="fragment">pause() isn't a guarantee</li>
+					</ul>
+
+					<aside class="notes" data-markdown>
+						* Backpressure is a dance, hyperactivity is bad
+						* Data events start immediately (big problem at scale)
+						  * Data starts before event handlers set up
+					</aside>
+				</section>
+
+				<section>
+					<h2>Streams of Tomorrow, Finally Here</h2>
+					<h4>Streams in 0.10</h4>
+					<ul>
+						<li>Readable streams are now "suck" streams</li>
+            <li class="fragment">Can use Readable to wrap old-style streams</li>
+						<li class="fragment">Object mode</li>
+						<li class="fragment">Same composable pipe API</li>
+						<li class="fragment">Shared base classes for backpressure and buffering</li>
+					</ul>
+
+					<aside class="notes" data-markdown>
+						* Readable/writable/duplex was one base class in Node 0.8
+						* highWaterMark option (16kb default) determines how much data is buffered
+					</aside>
+			  </section>
+
+        <section data-markdown>
+          ## Streams 0.10 Base Classes
+          #### stream.Readable
+
+          * Implement readable._read(size)
+          * Queue data from I/O source
+            * push(chunk) or unshift(chunk)
+          * Users call read([size]) or pipe(dest)
+            * read() returns null if less data is buffered than size
+            * If objectMode is true, read(n) returns one object
+        </section>
+
+        <section>
+          <section data-markdown>
+            ## Streams 0.10 Base Classes
+            #### stream.Writable
+
+            * Implement writable._write(chunk, encoding, cb)
+            * Users call
+              * write(chunk, [encoding], [cb])
+                  * write() returns false if the buffer is full 
+              * end([chunk], [encoding], [cb])
+          </section>
+
+          <section>
+            <h2>Streams 0.10 Base Classes</h2>
+            <h4>stream.Duplex</h4>
+
+            <ul>
+              <li>Inherits from Readable and Writable</li>
+              <li>Implement _read() and _write()</li>
+              <li>Queue data with push() and unshift()</li>
+              <li>Users call Readable and Writable methods</li>
+            </ul>
+
+            <aside class="notes" data-markdown>
+              * Prototypical inheritance from Readable
+              * Parasitical inheritance from Writable
+            </aside>
+          </section>
+
+          <section>
+            <h2>Streams 0.10 Base Classes</h2>
+            <h4>stream.Transform</h4>
+
+            <ul>
+              <li>Inherits from Duplex</li>
+              <li>Implement transform._transform(chunk, encoding, cb)</li>
+              <li>Users call Readable and Writable methods</li>
+            </ul>
+
+            <aside class="notes" data-markdown>
+						  * Transform - output connected somewhat to input. Saves implementing both
+							_read() and _write()
+              * Use this.push and this.unshift() to queue data
+            </aside>
+          </section>
+
+          <section data-markdown>
+            ## Streams 0.10 Base Classes
+            #### stream.PassThrough
+
+            * Inherits from Transform
+            * No method to implement
+            * Users call Readable and Writable methods
+          </section>
+        </section>
+
+				<section data-markdown>
+					# Example stream.Transform Code!
+				</section>
+
+				<section>
+					<h1>Unzip Demo</h1>
+				</section>
+
+				<section data-markdown>
+					## Other Relevant API Changes
+					#### process.nextTick()
+
+					> process.nextTick happens at the end of the current tick, immediately after the current stack unwinds. If you are currently using recursive nextTick calls, use setImmediate instead.
+
+					[More 0.8 to 0.10 API Changes](https://github.com/joyent/node/wiki/Api-changes-between-v0.8-and-v0.10)
+				</section>
+
+        <section>
+          <h2>Example 0.8 Compatibility!</h2>
+          
+          <a href="https://npmjs.org/package/readable-stream">readable-stream module</a>
+        </section>
+
+				<section>
+					<h2>Conclusions</h2>
+
+					<ul>
+						<li>Stream API is great for solving I/O bound problems</li>
+						<li>Streams2 developed in the open with a parallel
+							<a href="https://npmjs.org/package/readable-stream">user-land module</a>
+						</li>
+					</ul>
+					<aside class="notes" data-markdown>
+						* Now you can use and write streams.
+            * Streams2 API overall easier to reason about
+            * That said, spew streams style is occassionally useful
+              * Unzip - entry.autodrain reads on every 'readable'
+					</aside>
+				</section>
+
+				<section>
+					@substack<blockquote cite="https://github.com/substack/stream-handbook#why-you-should-use-streams">Streams make programming in node simple, elegant, and composable.</blockquote>
+					<br>
+					<h2>References</h2>
+					<ul>
+						<li>
+							<a href="https://dl.dropbox.com/u/3685/presentations/streams2/streams2-jsconfau.pdf">Streams PAST.pipe(PRESENT).pipe(FUTURE)</a> from JSConf AU 2012<br>
+							Isaac Schlueter aka Isaacs
+						<li>
+							<a href="http://maxogden.com/node-streams">Node Streams: How do they work?</a><br>
+							Max Ogden
+						</li>
+						<li>
+							<a href="https://github.com/substack/stream-handbook">Stream Handbook</a><br>
+							Substack
+						</li>
+						<li class="fragment">Ben Kelly</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Questions?</h1>
+					<div class="fragment" style="border-radius: 40px 10px;background:white;padding:10px;margin-top:80px;">
+						<h4><a href="http://twitter.com/evanoxfeld">@evanoxfeld</a></h4>
+						<h4><a href="http://github.com/evanoxfeld">github.com/evanoxfeld</a></h4>
+
+						<hr>
+
+						<img src="images/nic-logo.png" alt="Near Infinity">
+						<h4><a href="http://twitter.com/nearinfinity">@nearinfinity</a>
+						<h4><a href="http://github.com/nearinfinity">github.com/nearinfinity</a></h4>
+					</div>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
