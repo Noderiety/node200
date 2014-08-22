@@ -15,7 +15,7 @@
 * 12:30: WORKSHOP: [ExpressWorks](http://nodeschool.io/#expressworks) or [Kick off Koa](http://nodeschool.io/#kick-off-koa)
 * 1:30p: Mongoose
 * 2:00p: Your First CRUD App(s)
-* 3:30p: Streams
+* 3:30p: [Streams](http://blog.evanoxfeld.com/novanode-streams-0.10-presentation/#/2)
 * 4:30p: WORKSHOP: [Stream Adventure](http://nodeschool.io/#stream-adventure)
 * 6:30p: End
 
