@@ -4,11 +4,31 @@
    * list - Returns a list of threads
    * show - Displays a thread and its posts
 */
+var $ = require('stepup')
+var ObjectId = require('mongoose').Types.ObjectId
 var Thread = require('../models/thread');
 var Post = require('../models/post');
 
+function thread(req, res) {
+  $([
+    function ($) {
+      new Thread({title: req.body.title, author: req.body.author}).save($.none())
+    }, function($) {
+      res.end('Okay')
+    }
+  ])
+}
+
+
 function post(req, res) {
-  new Thread({title: req.body.title, author: req.body.author}).save();
+  $([
+    function ($) {
+      var obid = ObjectId(req.body.thread)
+      new Post({thread: obid, post: req.body.post}).save($.none())
+    }, function($) {
+      res.end('Okay')
+    }
+  ])
 }
 
 function list(req, res) {
@@ -26,8 +46,9 @@ function show(req, res) {
     })
 }
 
-module.exports = function(app) {
-  app.post('/thread', post);
-  app.get('/thread/:title.:format?', show);
-  app.get('/thread', list);
+module.exports = {
+  post: post
+, list: list
+, show: show
+, thread: thread
 }

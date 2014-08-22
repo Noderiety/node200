@@ -2,18 +2,20 @@
 var express = require('express')
 	, bodyParser = require('body-parser')
 	, methodOverride = require('method-override')
-	, controllers = require('./controllers/')
+	, morgan = require('morgan')
+	, routes = require('./routes/')
+	, trycatchMiddleware = require('./middlewares/trycatch')
 
 module.exports = function main() {
 	var app = express()
 
-  app.use(bodyParser.text())
+	app.use(trycatchMiddleware)
+	app.use(morgan('combined'))
+  app.use(bodyParser.urlencoded())
   app.use(methodOverride())
 
 	// set up the RESTful API, handler methods are defined in api.js
-	controllers.forEach(function(controller) {
-		controller(app)
-	})
+	routes(app)
 
 	return app
 }
