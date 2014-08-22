@@ -1,9 +1,7 @@
-#Node.js 200 (Mobile Server Bootcamp)
+#Noderiety Node 200
 
-##Go link
-[https://go/tbcnode200](https://go/tbcnode200)
 ##IRC
-\#mobileserverbootcamp
+\#noderietybootcamp
 
 ##Schedule
 
