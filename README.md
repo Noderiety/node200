@@ -14,7 +14,7 @@
 * 10:00: [Debugging](https://github.com/node-inspector/node-inspector) ([On IntelliJ](http://www.jetbrains.com/idea/webhelp/running-and-debugging-node-js.html))
 * 10:15p: Connect, Express & Koa
 * 11:30: Lunch
-* 12:30: WORKSHOP: [ExpressWorks](http://nodeschool.io/#expressworks), [Kick off Koa](http://nodeschool.io/#kick-off-koa) or [Make Me Hapi](http://nodeschool.io/#makemehapi)
+* 12:30: WORKSHOP: [ExpressWorks](http://nodeschool.io/#expressworks) or [Kick off Koa](http://nodeschool.io/#kick-off-koa)
 * 1:30p: Mongoose
 * 2:00p: Your First CRUD App(s)
 * 3:30p: Streams
@@ -24,10 +24,9 @@
 
 ##Workshops
 
-1. [Stream Adventure](http://nodeschool.io/#stream-adventure)
-2. [Express Works](http://nodeschool.io/#expressworks)
-3. [Kick off Koa](http://nodeschool.io/#kick-off-koa)
-4. [Make Me Hapi](http://nodeschool.io/#makemehapi)
+1. [Express Works](http://nodeschool.io/#expressworks)
+2. [Kick off Koa](http://nodeschool.io/#kick-off-koa)
+3. [Stream Adventure](http://nodeschool.io/#stream-adventure)
 
 ##Resources
 
