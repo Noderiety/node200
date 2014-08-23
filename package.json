@@ -8,6 +8,7 @@
     "hapi": "^6.5.1",
     "lodash": "^2.4.1",
     "q": "~1.0.1",
+    "request": "^2.40.0",
     "stack": "~0.1.0",
     "trycatch": "~1.4.4",
     "webkit-devtools-agent": "~0.2.3",

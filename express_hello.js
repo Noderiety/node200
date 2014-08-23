@@ -6,8 +6,9 @@ var express = require('express')
 	, app = express()
 
 // Add the route
-app.get('/home', function(req, res) {
-	res.end('hello world')
+app.post('/home', function(req, res) {
+	req.pipe(res)
+	// res.json(req.headers)
 })
 
 // Listen on host and port

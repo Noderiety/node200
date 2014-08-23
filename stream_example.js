@@ -1,5 +1,5 @@
 'use strict';
-var agent = require('webkit-devtools-agent');
+// var agent = require('webkit-devtools-agent');
 
 
 var Readable = require('stream').Readable;
@@ -16,6 +16,7 @@ function CapsLockStream() {
 			}
 		}
 		this.push(data);
+		throw new Error('fail')
 		done();
 	}
 }
@@ -24,10 +25,17 @@ function RandomLetterStream(n) {
 	var index = 0;
 	this.__proto__ = Readable.call(this);
 	this._read = function(size) {
-		// console.log('size: ', size);
 		if (n-- === 0) return this.push(null);
 		this.push(words[index++]);
-		// console.log('here: ', words[index])
+	}
+}
+
+function ConsoleLogTransformStream() {
+	this.__proto__ = Writable.call(this);
+	this._transform = function(chunk, encoding, done) {
+		console.log(String(chunk));
+		this.push(chunk);
+		done();
 	}
 }
 
@@ -48,10 +56,22 @@ function SplitterStream() {
 	}
 }
 
-var streams = [];
+var trycatch = require('trycatch')
 require('http').createServer(function(req, res) {
-	var r = (new RandomLetterStream(5))
-	r.pipe(new CapsLockStream).pipe(res);
-	r.pipe(new SplitterStream);
-	streams.push(r);
+	trycatch(function() {
+		(new RandomLetterStream).length
+		req.pipe(new CapsLockStream).pipe(res);
+	}, function(err) {
+		res.end(err.stack)
+	})
 }).listen(8000);
+
+
+
+
+
+
+
+
+
+
