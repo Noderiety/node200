@@ -5,10 +5,10 @@ function requestErrorHandler(req, res, err) {
 	res.end(err.stack);
 }
 
-function trycatchMiddleware(req, res, next) {
-	trycatch(function() {
-		next();
-	}, requestErrorHandler.bind(null, req, res));
+function trycatchMiddleware() {
+	return function(req, res, next) {
+		trycatch(next, requestErrorHandler.bind(null, req, res));
+	}
 }
 
 module.exports = trycatchMiddleware

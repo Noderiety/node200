@@ -15,10 +15,11 @@ function thread(req, res) {
     .done()
 }
 
-
 function post(req, res) {
-  let obid = ObjectId(req.param('thread'))
-  q.ninvoke(new Post({thread: obid, post: req.param('post')}), 'save')
+  let threadId = ObjectId(req.param('thread'))
+  let postValue = req.query.post
+  console.log(threadId, postValue)
+  q.ninvoke(new Post({thread: threadId, post: postValue}), 'save')
     .then(() => res.end('Okay'))
 }
 
@@ -30,9 +31,10 @@ function list(req, res) {
 
 // first locates a thread by title, then locates the replies by thread ID.
 function show(req, res) {
-  Thread.findOne({title: req.param('title')}).exec()
+  let title = req.param('title')
+  q.ninvoke(Thread, 'findOne', {title: title})
     .then((thread) => {
-      Post.find({thread: thread._id}).exec()
+      q.ninvoke(Post, 'find', {thread: thread._id})
         .then((posts) => res.send([{thread: thread, posts: posts}]))
     })
     .done()
