@@ -8,7 +8,7 @@ app.use(require('morgan')('combined'))
 app.use(require('serve-favicon')(__dirname + '/../static/favicon.ico'))
 
 // Static file support
-app.use(require('serve-static')(__dirname + '/static', {'index': false}))
+app.use(require('serve-static')(__dirname + '/../static', {'index': false}))
 
 // Cookie-based session support
 app.use(require('cookie-session')({keys: ['secret1', 'secret2']})) // adds req.cookies

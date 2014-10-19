@@ -3,7 +3,7 @@ let writableStream = new Writable
 
 // Implement the _write function to consume data
 writableStream._write = (chunk, enc, next) => {
-  console.log(chunk)
+  process.stdout.write(String(chunk))
   next()
 }
 
