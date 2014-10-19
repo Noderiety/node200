@@ -1,5 +1,5 @@
 {
 	"mongo": {
-		"url": "mongodb://user:password@127.0.0.1:27017/noderiety"
+		"url": "mongodb://user:password@ds047040.mongolab.com:47040/noderiety"
 	}
 }
