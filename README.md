@@ -14,6 +14,7 @@
   * [Stream Adventure](https://github.com/substack/stream-adventure)
   * [ExpressWorks](https://github.com/azat-co/expressworks)
   * [Kick off Koa](https://github.com/koajs/kick-off-koa)
+  * [Make Me Hapi](https://github.com/hapijs/makemehapi)
 * 6:30p: End
 
 ##Preparation
@@ -79,6 +80,7 @@ source ~/.bashrc
 1. [Express Works](https://github.com/azat-co/expressworks)
 2. [Kick off Koa](https://github.com/koajs/kick-off-koa)
 3. [Stream Adventure](https://github.com/substack/stream-adventure)
+4. [Make Me Hapi](https://github.com/hapijs/makemehapi)
 
 Workshops can be run in 1 of 2 ways:
 
