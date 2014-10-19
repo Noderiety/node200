@@ -100,6 +100,8 @@ $ functional-javascript-workshop
 
 Other Web Frameworks:
 
+[LoopBack](http://loopback.io/)
+
 [Hapi](https://github.com/spumko/hapi/)
 
 [CompoundJS](http://compoundjs.com)
