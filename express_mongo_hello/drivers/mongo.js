@@ -1,8 +1,9 @@
-var mongoose = require('mongoose')
+let mongoose = require('mongoose')
+	, q = require('q')
 
 module.exports = {
-	start: function (config, callback) {
+	start: (config) => {
 		// connect to Mongo when the app initializes
-		mongoose.connect(config.url, callback)
+		return q.ninvoke(mongoose, 'connect', config.url)
 	}
 }

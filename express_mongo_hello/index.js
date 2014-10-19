@@ -11,7 +11,7 @@ co(function *() {
 	var app = App()
 
 	yield [
-		mongoDriver.start.bind(null, config.mongo)
+		mongoDriver.start(config.mongo)
  	, app.listen.bind(app, port)
  	]
 	

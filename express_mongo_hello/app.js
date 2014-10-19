@@ -1,5 +1,5 @@
 // Creates and configures the server
-var express = require('express')
+let express = require('express')
 	, bodyParser = require('body-parser')
 	, methodOverride = require('method-override')
 	, morgan = require('morgan')
@@ -7,7 +7,7 @@ var express = require('express')
 	, trycatchMiddleware = require('./middlewares/trycatch')
 
 module.exports = function main() {
-	var app = express()
+	let app = express()
 
 	app.use(trycatchMiddleware)
 	app.use(morgan('combined'))
@@ -19,4 +19,3 @@ module.exports = function main() {
 
 	return app
 }
-

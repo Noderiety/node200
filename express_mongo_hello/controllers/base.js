@@ -4,46 +4,38 @@
    * list - Returns a list of threads
    * show - Displays a thread and its posts
 */
-var $ = require('stepup')
-var ObjectId = require('mongoose').Types.ObjectId
-var Thread = require('../models/thread');
-var Post = require('../models/post');
+let q = require('q')
+  , ObjectId = require('mongoose').Types.ObjectId
+  , Thread = require('../models/thread')
+  , Post = require('../models/post')
 
 function thread(req, res) {
-  $([
-    function ($) {
-      new Thread({title: req.body.title, author: req.body.author}).save($.none())
-    }, function($) {
-      res.end('Okay')
-    }
-  ])
+  q.invoke(new Thread({title: req.param('title'), author: req.param('author')}), 'save')
+    .then(() => res.end('Okay'))
+    .done()
 }
 
 
 function post(req, res) {
-  $([
-    function ($) {
-      var obid = ObjectId(req.body.thread)
-      new Post({thread: obid, post: req.body.post}).save($.none())
-    }, function($) {
-      res.end('Okay')
-    }
-  ])
+  let obid = ObjectId(req.param('thread'))
+  q.ninvoke(new Post({thread: obid, post: req.param('post')}), 'save')
+    .then(() => res.end('Okay'))
 }
 
 function list(req, res) {
-  Thread.find(function(err, threads) {
-    res.send(threads);
-  });
+  Thread.find().exec()
+    .then((threads) => res.send(threads))
+    .done()
 }
 
 // first locates a thread by title, then locates the replies by thread ID.
 function show(req, res) {
-    Thread.findOne({title: req.params.title}, function(error, thread) {
-        var posts = Post.find({thread: thread._id}, function(error, posts) {
-          res.send([{thread: thread, posts: posts}]);
-        });
+  Thread.findOne({title: req.param('title')}).exec()
+    .then((thread) => {
+      Post.find({thread: thread._id}).exec()
+        .then((posts) => res.send([{thread: thread, posts: posts}]))
     })
+    .done()
 }
 
 module.exports = {
