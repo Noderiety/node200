@@ -1,0 +1,2 @@
+readableOrTransformOrDuplexStream.pipe(writableStream)
+var writableStream, readableOrTransformOrDuplexStream
