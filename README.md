@@ -1,7 +1,7 @@
 #Noderiety Node 200
 
 ##IRC
-\#noderietybootcamp
+\#noderiety
 
 ##Schedule
 
