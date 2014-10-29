@@ -9,7 +9,7 @@
 * **10:45: Break**
 * 11:00: Connect, Express
 * **11:45: Lunch**
-* 12:45: Your First CRUD App
+* 12:45: [Your First CRUD App](https://github.com/Noderiety/express)
 * **2:45: Break**
 * 3:00p: Mocha, Chai & Unit Testing
 * 4:00p: Workshops: 
