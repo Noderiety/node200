@@ -6,16 +6,16 @@
 ##Schedule
 
 * 09:30 - Streams
-* 11:00: Connect, Express & Koa
-* 11:45: Lunch
-* 1:15p: Mongoose
-* 2:00p: Your First CRUD App
-* 4:30p: Workshops: 
+* **10:45: Break**
+* 11:00: Connect, Express
+* **11:45: Lunch**
+* 12:45: Your First CRUD App
+* **2:45: Break**
+* 3:00p: Mocha, Chai & Unit Testing
+* 4:00p: Workshops: 
   * [Stream Adventure](https://github.com/substack/stream-adventure)
   * [ExpressWorks](https://github.com/azat-co/expressworks)
-  * [Kick off Koa](https://github.com/koajs/kick-off-koa)
-  * [Make Me Hapi](https://github.com/hapijs/makemehapi)
-* 6:30p: End
+* 5:00p: End
 
 ##Preparation
 Install [nvm](https://github.com/creationix/nvm):
