@@ -14,14 +14,15 @@ app.use(require('serve-favicon')(__dirname + '/../static/favicon.ico'))
 // Static file support
 app.use(require('serve-static')(__dirname + '/../static', {'index': false}))
 
+app.all('/echo/', (req, res) => {
+	req.pipe(res)
+})
+
 // Add req.body
 app.use(require('body-parser').urlencoded())
 app.use(require('body-parser').json())
 app.use(require('body-parser').text())
 
-app.all('/echo/', (req, res) => {
-	req.pipe(res)
-})
 app.get('/', (req, res) => {
 	res.send('Hello world')
 })

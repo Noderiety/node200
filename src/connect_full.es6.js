@@ -2,7 +2,9 @@ let connect = require('connect')
 	, app = connect()
 
 // Http request logging
-app.use(require('morgan')('combined'))
+let morgan = require('morgan')('combined')
+console.log(`morgan: \n\n${morgan}`)
+app.use(morgan)
 
 // favicon.ico support
 app.use(require('serve-favicon')(__dirname + '/../static/favicon.ico'))
@@ -18,8 +20,8 @@ app.use(require('body-parser').urlencoded())
 app.use(require('body-parser').json())
 app.use(require('body-parser').text())
 
-app.use(require('connect-route')(require('./routes/users')))
-app.use(require('connect-route')(require('./routes/index')))
+// app.use(require('connect-route')(require('./routes/users')))
+// app.use(require('connect-route')(require('./routes/index')))
 
 // Error handler middleware
 app.use((err, req, res, next) => {

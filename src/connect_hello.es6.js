@@ -11,7 +11,18 @@ app.use(connectRouter((app) => {
 	app.get('/home', (req, res, next) => {
 		res.end('hello world')
 	})
+	app.get('/', (req, res, next) => {
+		res.end('woops')
+	})
 }))
+
+app.use((req, res, next) => {
+	if (req.url = '/') {
+		console.log('doing nothing')
+		res.end('hello world\n')
+	}
+	next()
+})
 
 // Listen on host and port
 app.listen(port, host, () => {

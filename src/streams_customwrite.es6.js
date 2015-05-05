@@ -7,7 +7,6 @@ writableStream._write = (chunk, enc, next) => {
   setTimeout(next, 300)
 }
 
-
 process.stdin.on('readable', () => {
   let chunk
   while(chunk=process.stdin.read(5)){

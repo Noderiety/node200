@@ -4,7 +4,6 @@ let express = require('express')
 	, host = '127.0.0.1'
 	// Create an express server
 	, app = express()
-	, streamingRouter = express.Router()
 
 // Http request logging
 app.use(require('morgan')('combined'))
@@ -15,12 +14,11 @@ app.use(require('serve-favicon')(__dirname + '/../static/favicon.ico'))
 // Static file support
 app.use(require('serve-static')(__dirname + '/../static', {'index': false}))
 
-streamingRouter.all('/echo/', (req, res) => {
+app.all('/echo/', (req, res) => {
 	console.log('echo')
 	req.pipe(res)
 })
 
-app.use(streamingRouter)
 
 // Add req.body
 app.use(require('body-parser').urlencoded())
